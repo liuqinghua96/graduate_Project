@@ -1,0 +1,19 @@
+html,body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.el-card {
+  margin-top: 15px;
+}
+.el-table {
+  margin-top: 15px;
+}
+.el-pagination {
+  float: right;
+  margin: 20px;
+}
+.el-card .el-alert {
+  margin-bottom: 20px;
+}
