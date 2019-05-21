@@ -38,10 +38,21 @@ export default {
     }
   },
   methods: {
+    async getArticle_Detail (id) {
+      const {
+        data: { result }
+      } = await this.$http.get('getArticle_Detail', {
+        params: { id }
+      })
+      result[0].article_file = '../../../static/' + result[0].article_file
+      this.info = result[0]
+      document.getElementById(
+        'content'
+      ).innerHTML = this.info.article_text
+    }
   },
   mounted () {
-    this.info = this.$route.query.row
-    document.getElementById('content').innerHTML = this.info.article_text
+    this.getArticle_Detail(this.$route.query.id)
   }
 }
 </script>

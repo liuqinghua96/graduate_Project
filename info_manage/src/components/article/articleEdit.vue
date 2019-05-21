@@ -13,7 +13,6 @@ export default {
   methods: {
   },
   mounted () {
-    console.log(this.$route.params.row)
   }
 }
 </script>

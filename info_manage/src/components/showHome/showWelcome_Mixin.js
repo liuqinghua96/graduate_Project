@@ -48,6 +48,9 @@ export default {
     },
     toShowList (id) {
       this.$router.push({ path: '/showList', query: { id } })
+    },
+    toShowDetail (id) {
+      this.$router.push({ path: '/showDetail', query: { id } })
     }
   },
   mounted () {

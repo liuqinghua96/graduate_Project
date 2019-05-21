@@ -5,7 +5,9 @@
     <ul class="nav">
       <li v-for="item in cateList" :key="item.cate_id">
         <a @click="toShowList(item.cate_id)">
+        <!-- <router-link to="/showList/{{item.cate_id}}"> -->
           <i :class="['fa', `${item.cate_icon}`]"></i>{{item.cate_name}}
+        <!-- </router-link> -->
         </a>
       </li>
     </ul>
@@ -19,14 +21,14 @@
   <div class="aside">
     <div class="widgets">
       <el-button class="btn" type="success" round icon="el-icon-setting">个人中心</el-button>
-      <el-button class="btn" type="primary" round>公告</el-button>
+      <el-button class="btn" type="primary" round @click="toAnnounceList()">公告</el-button>
       <el-button class="btn" type="danger" round @click="logout()">退出</el-button>
     </div>
     <div class="widgets">
       <h4>随机推荐</h4>
       <ul class="body random">
         <li v-for="item in randCommend" :key="item.article_id">
-          <a href="javascript:;">
+          <a @click="toShowDetail(item.article_id)">
             <p class="title">{{item.article_title}}</p>
             <p class="reading">阅读({{item.article_click}})</p>
             <div class="pic">

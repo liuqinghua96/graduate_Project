@@ -73,7 +73,7 @@
                 <el-button size="mini"
                            icon="el-icon-more"
                            round
-                           @click="toDetail(scope.row)"></el-button>
+                           @click="toDetail(scope.row.article_id)"></el-button>
               </el-tooltip>
               <el-tooltip class="item"
                           effect="dark"
@@ -92,7 +92,7 @@
               <el-button size="mini"
                          icon="el-icon-edit"
                          round
-                         @click="toEditArticle(scope.row)"></el-button>
+                         @click="toEditArticle(scope.row.article_id)"></el-button>
             </el-tooltip>
             </el-button-group>
           </template>

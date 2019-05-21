@@ -11,6 +11,12 @@ import './assets/css/font-awesome.css'
 
 import axios from './http'
 // import {setCookie, getCookie, delCookie} from '@/router/cookie.js'
+import VueQuillEditor from 'vue-quill-editor'
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 
 Vue.use(ElementUI, {size: 'small'})
 Vue.prototype.$http = axios

@@ -14,8 +14,10 @@
     "axios": "^0.18.0",
     "element-ui": "^2.7.2",
     "jquery": "^3.4.1",
+    "nprogress": "^0.2.0",
     "vue": "^2.5.2",
     "vue-cookies": "^1.5.13",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

@@ -7,6 +7,7 @@
         <i>{{i+1}}</i>
         <span class="anc_title">【{{item.anc_title}}】</span>
         <span class="anc_content">{{item.anc_content}}</span>
+        <span>{{item.anc_addtime}}</span>
       </li>
     </ol>
   </div>
@@ -14,10 +15,10 @@
     <h3>焦点关注</h3>
     <ul>
       <li v-for="(item,i) in focusList" :class="i===0?'large':''" :key="i">
-        <router-link to="/showDetail">
+        <a @click="toShowDetail(item.article_id)">
           <img :src="item.article_file" alt="">
           <span>{{item.article_title}}</span>
-        </router-link>
+        </a>
       </li>
     </ul>
   </div>
@@ -26,8 +27,8 @@
     <ol>
       <li v-for="(item,i) in weekHotList" :key="i">
         <i>{{i+1}}</i>
-        <router-link to="/showDetail">{{item.article_title}}</router-link>
-        <router-link to="/showDetail" class="like">赞({{item.article_good}})</router-link>
+        <a @click="toShowDetail(item.article_id)">{{item.article_title}}</a>
+        <span>赞({{item.article_good}})</span>
         <span>阅读 ({{item.article_click}})</span>
       </li>
     </ol>
@@ -36,10 +37,10 @@
     <h3>热门推荐</h3>
     <ul>
       <li v-for="(item,i) in hotRecommend" :key="i">
-        <router-link to="/showDetail">
+        <a @click="toShowDetail(item.article_id)">
           <img :src="item.article_file" alt="">
           <span>{{item.article_title}}</span>
-        </router-link>
+        </a>
       </li>
     </ul>
   </div>
@@ -48,7 +49,7 @@
     <div v-for="(item,i) in lastSubmitList" class="entry" :key="i">
       <div class="head">
         <span class="sort">{{item.cate_name}}</span>
-        <a>{{item.article_title}}</a>
+        <a @click="toShowDetail(item.article_id)">{{item.article_title}}</a>
       </div>
       <div class="main">
         <p class="info">{{item.user_nickname}} 发表于 {{item.article_addtime}}</p>

@@ -15,8 +15,19 @@ import ShowHome from '@/components/showHome/ShowHome'
 import ShowWelcome from '@/components/showHome/ShowWelcome'
 import ShowList from '@/components/showList/ShowList'
 import ShowDetail from '@/components/showDetail/ShowDetail'
+import ShowAnnounce from '@/components/showAnnounce/ShowAnnounce'
+// 引入nprogress
+// 进度条
+import NProgress from 'nprogress'
+// 这个样式必须引入
+import 'nprogress/nprogress.css'
 
 Vue.use(Router)
+
+// 简单配置
+NProgress.inc(0.2)
+NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
+
 const router = new Router({
   routes: [
     {
@@ -55,7 +66,8 @@ const router = new Router({
       children: [
         { path: '/showWelcome', name: 'showWelcome', component: ShowWelcome },
         { path: '/showDetail', name: 'showDetail', component: ShowDetail },
-        { path: '/showList', name: 'showList', component: ShowList }
+        { path: '/showList', name: 'showList', component: ShowList },
+        { path: '/showAnnounce', name: 'showAnnounce', component: ShowAnnounce }
       ]
     }
   ]
@@ -68,7 +80,11 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/register') return next()
   // 对于其他URL地址需要检测浏览器中的sessionStorage中是否已经存储了值
   if (!sessionStorage.getItem('token')) return next('/login')
+  NProgress.start()
   next()
+})
+router.afterEach(() => {
+  NProgress.done()
 })
 
 export default router

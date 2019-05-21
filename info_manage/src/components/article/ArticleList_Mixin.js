@@ -36,12 +36,12 @@ export default {
       this.getData()
     },
     // 跳转到文章详情界面
-    toDetail (row) {
-      this.$router.push({ path: '/articleList/detail', query: { row } })
+    toDetail (id) {
+      this.$router.push({ path: '/articleList/detail', query: { id } })
     },
     // 跳转到编辑文章界面
-    toEditArticle (row) {
-      this.$router.push({ name: 'articleEdit', params: { row } })
+    toEditArticle (id) {
+      this.$router.push({ path: '/articleList/edit', query: { id } })
     },
     showDialogAddForm () {
       this.dialogAddVisible = true

@@ -9,30 +9,27 @@ export default {
     }
   },
   watch: {
-    /* queryId: (newVal, oldVal) => {
-    } */
+    '$route' (to, from) {
+      this.getData(this.$route.query.id)
+    }
   },
   methods: {
-    async getData () {
-      // console.log(this.$route.query.id)
+    async getData (id) {
       // 按照id获取
       const { data: { result } } = await this.$http.get('getShowList', {
-        params: { id: this.queryId }
+        params: { id }
       })
       result.forEach((item, i) => {
         item.article_file = '../../../static/' + item.article_file
       })
       this.dataList = result
       this.h3Text = result[0].cate_name
+    },
+    toShowDetail (id) {
+      this.$router.push({ path: '/showDetail', query: { id } })
     }
   },
   mounted () {
-    this.getData()
-  }/* ,
-  beforeUpdate () {
-    if (this.$route.query.id !== this.queryId) {
-      this.getData()
-      this.queryId = this.$route.query.id
-    }
-  } */
+    this.getData(this.queryId)
+  }
 }
