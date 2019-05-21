@@ -82,7 +82,7 @@
                 <el-button size="mini"
                            icon="el-icon-delete"
                            round
-                           @click="delUser(scope.row.article_id)"></el-button>
+                           @click="delArticle(scope.row.article_id)"></el-button>
               </el-tooltip>
               <el-tooltip v-if="scope.row.user_state === 0"
                         class="item"

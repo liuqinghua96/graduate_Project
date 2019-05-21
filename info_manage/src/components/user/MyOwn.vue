@@ -22,9 +22,8 @@
           <el-input v-model="editForm.user_nickname"></el-input>
         </el-form-item>
         <el-form-item label="密码"
-                      prop="user_pwd"
-                      type="password">
-          <el-input v-model="editForm.user_pwd"></el-input>
+                      prop="user_pwd">
+          <el-input v-model="editForm.user_pwd" type="password"></el-input>
         </el-form-item>
         <el-form-item label="手机号"
                       prop="user_tel">

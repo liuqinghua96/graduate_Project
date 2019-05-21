@@ -46,7 +46,7 @@ export default {
       this.$router.push('/articleList/add')
     },
     // 删除文章
-    delUser (id) {
+    delArticle (id) {
       this.$confirm('永久删除该文章?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

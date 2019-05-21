@@ -26,11 +26,23 @@ export default {
           { required: true, message: '手机号不得为空', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
         ]
-      }
+      },
+      queryMsg: {
+        article_userid: sessionStorage.getItem('token'),
+        query: '',
+        pageNum: 1,
+        pageSize: 5
+      },
+      // 文章数据列表条目数
+      total: 0,
+      articleList: [],
+      addForm: {},
+      article_text: '',
+      text: ''
     }
   },
   methods: {
-    async getData () {
+    async getOwnData () {
       const { data } = await this.$http.get('getOnlyUser', { params: { id: sessionStorage.getItem('token') } })
       this.editForm = data.result[0]
     },
@@ -51,9 +63,55 @@ export default {
           this.$refs.editForm.resetFields()
         }
       })
+    },
+    // 获取文章列表
+    async getOwnArticleData () {
+      let { data } = await this.$http.get('getOwnArticle', {
+        params: this.queryMsg
+      })
+      if (data.code !== 200) return this.$message.error(data.message)
+      this.articleList = data.result
+      this.total = data.total
+    },
+    // 切换页码
+    changeOwnPager (newpage) {
+      this.queryMsg.pageNum = newpage
+      this.getOwnArticleData()
+    },
+    // 跳转到文章详情界面
+    toDetail (id) {
+      this.$router.push({ path: '/articleList/detail', query: { id } })
+    },
+    // 跳转到编辑文章界面
+    toEditArticle (id) {
+      this.$router.push({ path: '/articleList/edit', query: { id } })
+    },
+    toAddArticle () {
+      this.$router.push('/articleList/add')
+    },
+    // 删除文章
+    delArticle (id) {
+      this.$confirm('永久删除该文章?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          const { data } = await this.$http.post(
+            'delArticle',
+            qs.stringify({ id })
+          )
+          if (data.code !== 200) return this.$message.error(data.message)
+          this.$message.success(data.message)
+          this.getOwnArticleData()
+        })
+        .catch(() => {
+          this.$message.info('已取消删除')
+        })
     }
   },
   mounted () {
-    this.getData()
+    this.getOwnData()
+    this.getOwnArticleData()
   }
 }
