@@ -20,7 +20,7 @@
   </div>
   <div class="aside">
     <div class="widgets">
-      <el-button class="btn" type="success" round icon="el-icon-setting">个人中心</el-button>
+      <el-button class="btn" type="success" round icon="el-icon-setting" @click="toOwnCenter()">个人中心</el-button>
       <el-button class="btn" type="primary" round @click="toAnnounceList()">公告</el-button>
       <el-button class="btn" type="danger" round @click="logout()">退出</el-button>
     </div>

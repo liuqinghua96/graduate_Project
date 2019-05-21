@@ -17,6 +17,7 @@ import ShowWelcome from '@/components/showHome/ShowWelcome'
 import ShowList from '@/components/showList/ShowList'
 import ShowDetail from '@/components/showDetail/ShowDetail'
 import ShowAnnounce from '@/components/showAnnounce/ShowAnnounce'
+import ShowOwn from '@/components/showOwn/ShowOwn'
 // 引入nprogress
 // 进度条
 import NProgress from 'nprogress'
@@ -69,7 +70,8 @@ const router = new Router({
         { path: '/showWelcome', name: 'showWelcome', component: ShowWelcome },
         { path: '/showDetail', name: 'showDetail', component: ShowDetail },
         { path: '/showList', name: 'showList', component: ShowList },
-        { path: '/showAnnounce', name: 'showAnnounce', component: ShowAnnounce }
+        { path: '/showAnnounce', name: 'showAnnounce', component: ShowAnnounce },
+        { path: '/showOwn', name: 'showOwn', component: ShowOwn }
       ]
     }
   ]

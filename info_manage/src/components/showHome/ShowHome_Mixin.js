@@ -46,6 +46,9 @@ export default {
     },
     toShowDetail (id) {
       this.$router.push({ path: '/showDetail', query: { id } })
+    },
+    toOwnCenter () {
+      this.$router.push('/showOwn')
     }
   },
   mounted () {
