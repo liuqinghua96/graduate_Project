@@ -4,9 +4,12 @@ export default {
   data () {
     return {
       hotRecommend: [],
+      weekHotList: [],
       articleInfo: {},
       contentText: '',
       queryId: this.$route.query.id,
+      // 评论列表
+      commentList: [],
       form: {
         articleId: 0,
         userId: sessionStorage.getItem('token'),
@@ -14,8 +17,6 @@ export default {
         // 0为发布状态，1为草稿状态
         cmtState: 0
       },
-      // 评论列表
-      commentList: [],
       rules: {
         textarea: [
           { required: true, message: '评论不得为空', trigger: 'blur' }
@@ -72,9 +73,22 @@ export default {
         }
       })
       this.form.textarea = ''
+      this.getArticleLastCmt(this.$route.query.id)
+    },
+    async getWeekHot () {
+      // 按照点赞数量获取
+      const {data: {result}} = await this.$http.get('getWeekHot')
+      result.forEach((item, i) => {
+        item.article_file = '../../../static/' + item.article_file
+      })
+      this.weekHotList = result
+    },
+    toShowDetail (id) {
+      this.$router.push({ path: '/showDetail', query: { id } })
     }
   },
   mounted () {
     this.getArticle_Detail(this.queryId)
+    this.getWeekHot()
   }
 }

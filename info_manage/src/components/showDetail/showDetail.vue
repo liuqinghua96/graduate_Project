@@ -61,9 +61,17 @@
         <el-button type="success" plain class="formBtn" @click="submitArticle_Cmt(0)">提交评论</el-button>
       </div>
     </div>
-    <!-- <quill-editor v-model="contentText"
-                  style="height:300px">
-    </quill-editor> -->
+    <div class="panel top">
+      <h3>一周热门排行</h3>
+      <ol>
+        <li v-for="(item,i) in weekHotList" :key="i">
+          <i>{{i+1}}</i>
+          <a @click="toShowDetail(item.article_id)">{{item.article_title}}</a>
+          <span>赞({{item.article_good}})</span>
+          <span>阅读 ({{item.article_click}})</span>
+        </li>
+      </ol>
+    </div>
   </div>
 </template>
 <script>

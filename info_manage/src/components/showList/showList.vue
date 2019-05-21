@@ -29,6 +29,17 @@
         </div>
       </div>
     </div>
+    <div class="panel focus">
+    <h3>焦点关注</h3>
+    <ul>
+      <li v-for="(item,i) in focusList" :class="i===0?'large':''" :key="i">
+        <a @click="toShowDetail(item.article_id)">
+          <img :src="item.article_file" alt="">
+          <span>{{item.article_title}}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
   </div>
 </template>
 <script>

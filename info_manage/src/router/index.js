@@ -9,6 +9,7 @@ import UserList from '@/components/user/UserList'
 import ArticleList from '@/components/article/ArticleList'
 import ArticleDetail from '@/components/article/ArticleDetail'
 import ArticleEdit from '@/components/article/ArticleEdit'
+import ArticleAdd from '@/components/article/ArticleAdd'
 import CommentList from '@/components/comment/CommentList'
 import AnnounceList from '@/components/announce/AnnounceList'
 import ShowHome from '@/components/showHome/ShowHome'
@@ -55,6 +56,7 @@ const router = new Router({
         { path: '/articleList', name: 'articleList', component: ArticleList },
         { path: '/articleList/detail', name: 'articleDetail', component: ArticleDetail },
         { path: '/articleList/edit', name: 'articleEdit', component: ArticleEdit },
+        { path: '/articleList/add', name: 'articleAdd', component: ArticleAdd },
         { path: '/commentList', name: 'commentList', component: CommentList },
         { path: '/announceList', name: 'AnnounceList', component: AnnounceList }
       ]

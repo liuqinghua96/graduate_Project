@@ -5,7 +5,8 @@ export default {
     return {
       h3Text: '',
       dataList: [],
-      queryId: this.$route.query.id
+      queryId: this.$route.query.id,
+      focusList: []
     }
   },
   watch: {
@@ -27,9 +28,17 @@ export default {
     },
     toShowDetail (id) {
       this.$router.push({ path: '/showDetail', query: { id } })
+    },
+    async getFocus () {
+      const {data: {result}} = await this.$http.get('getFocus')
+      result.forEach((item, i) => {
+        item.article_file = '../../../static/' + item.article_file
+      })
+      this.focusList = result
     }
   },
   mounted () {
     this.getData(this.queryId)
+    this.getFocus()
   }
 }

@@ -44,4 +44,60 @@ router.post('/api/graduate/delArticle', (req, res) => {
     }
   )
 })
+
+// 新建文章并保存为草稿/发布
+router.post('/api/graduate/submitAddArticle', (req, res) => {
+  const submitObj = {
+    article_title: req.body.article_title,
+    article_desc: req.body.article_desc,
+    article_cateid: req.body.article_cateid,
+    article_text: req.body.article_text,
+    article_state: req.body.article_state,
+    article_userid: req.body.article_userid,
+    article_addtime: moment().format('YYYY-MM-DD'),
+    article_click: 0,
+    article_good: 0,
+    article_bad: 0,
+    article_focus: 0,
+    article_cmt: 0,
+    article_file: 'widget_1.jpg'
+  }
+  db.query(`insert into article set ? `, submitObj, (err, result) => {
+    if (submitObj.article_state == '已发布') {
+      if (err || result.affectedRows !== 1) {
+        console.log(err)
+        return res.send({ code: 201, message: '发布文章失败' })
+      }
+      res.send({ code: 200, message: '发布文章成功' })
+    } else {
+      if (err || result.affectedRows !== 1) {
+        console.log(err)
+        return res.send({ code: 201, message: '保存草稿失败' })
+      }
+      res.send({ code: 200, message: '保存草稿成功' })
+    }
+  })
+})
+// 编辑文章并保存为草稿/发布
+router.post('/api/graduate/submitEditArticle', (req, res) => {
+  const submitObj = {
+    article_text: req.body.article_text,
+    article_state: req.body.article_state
+  }
+  db.query(`update article set ? where article_id = ${req.body.article_id}`, submitObj, (err, result) => {
+    if (submitObj.article_state == '已发布') {
+      if (err || result.affectedRows !== 1) {
+        console.log(err)
+        return res.send({ code: 201, message: '重新发布文章失败' })
+      }
+      res.send({ code: 200, message: '重新发布文章成功' })
+    } else {
+      if (err || result.affectedRows !== 1) {
+        console.log(err)
+        return res.send({ code: 201, message: '保存草稿失败' })
+      }
+      res.send({ code: 200, message: '保存草稿成功' })
+    }
+  })
+})
 module.exports = router

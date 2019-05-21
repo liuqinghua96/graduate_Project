@@ -22,10 +22,10 @@
                        icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
-        <!-- 添加用户 -->
+        <!-- 添加文章 -->
         <el-col :span="18">
           <el-button type="primary"
-                     @click="showDialogAddForm()"
+                     @click="toAddArticle()"
                      plain>添加文章</el-button>
         </el-col>
       </el-row>

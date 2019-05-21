@@ -11,7 +11,6 @@ export default {
       // 文章数据列表条目数
       total: 0,
       articleList: [],
-      dialogAddVisible: false,
       addForm: {},
       article_text: '',
       text: ''
@@ -43,8 +42,8 @@ export default {
     toEditArticle (id) {
       this.$router.push({ path: '/articleList/edit', query: { id } })
     },
-    showDialogAddForm () {
-      this.dialogAddVisible = true
+    toAddArticle () {
+      this.$router.push('/articleList/add')
     },
     // 删除文章
     delUser (id) {

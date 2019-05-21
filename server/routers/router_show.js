@@ -120,7 +120,7 @@ router.get('/api/graduate/getArticle_Detail', (req, res) => {
 })
 // 获取当前展示文章的相关最新评论
 router.get('/api/graduate/getArticleLastCmt', (req, res) => {
-  db.query(`select * from comment,users where comment.cmt_userid = users.user_id and comment.cmt_articleid = ${req.query.id}`, (err, result) => {
+  db.query(`select * from comment,users where comment.cmt_userid = users.user_id and comment.cmt_articleid = ${req.query.id} and comment.cmt_state = 0`, (err, result) => {
     if (err) {
       console.log(err)
       return res.send({ code: 201, message: '获取相关评论失败' })
@@ -153,7 +153,6 @@ router.post('/api/graduate/submitArticle_Cmt', (req, res) => {
     }
   })
 })
-
 
 // -------------------------------------------------------公告列表页局部区域---------------------------------------------------------------------
 // 获取全部公告
