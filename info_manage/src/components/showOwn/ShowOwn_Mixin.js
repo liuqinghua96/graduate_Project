@@ -9,6 +9,7 @@ export default {
       callback()
     }
     return {
+      // ------------------------------------个人信息部分数据----------------------------
       editForm: {},
       rules: {
         user_email: [
@@ -27,30 +28,73 @@ export default {
           { validator: checkMobile, trigger: 'blur' }
         ]
       },
-      queryMsg: {
+      // --------------------------------个人文章列表页------------------------------
+      queryArticleMsg: {
         article_userid: sessionStorage.getItem('token'),
         query: '',
         pageNum: 1,
         pageSize: 5
       },
       // 文章数据列表条目数
-      total: 0,
+      articleTotal: 0,
       articleList: [],
       addForm: {},
       article_text: '',
-      text: ''
+      // text: ''
+      // -------------------------------------个人评论列表-------------------------------
+      queryCommentMsg: {
+        cmt_userid: sessionStorage.getItem('token'),
+        query: '',
+        pageNum: 1,
+        pageSize: 5
+      },
+      // 用户数据列表条目数
+      commentTotal: 0,
+      commentList: [],
+      dialogCommentEditVisible: false,
+      editCommentForm: {
+        cmt_id: 0,
+        cmt_state: 0,
+        cmt_articleid: 1,
+        article_title: '',
+        cmt_content: ''
+      },
+      rules_cmt: {
+        cmt_content: [
+          { required: true, message: '内容不得为空', trigger: 'blur' }
+        ],
+        cmt_state: [
+          { required: true, message: '发布状态不得为空', trigger: 'blur' }
+        ]
+      },
+      // --------------------------------------焦点关注部分---------------------------------------
+      focusList: []
+
     }
   },
   methods: {
+
+    // ----------------------------------------------切换tab栏部分-----------------------------------------------
+    tabClick (element) {
+      if (element === this.$refs.ownInfo) {
+        this.getOwnData()
+      } else if (element === this.$refs.ownArticle) {
+        this.getOwnArticleData()
+      } else {
+        this.getCommentData()
+      }
+    },
+
+    // -----------------------------------------------个人信息部分--------------------------------------------------
     async getOwnData () {
       const { data } = await this.$http.get('getOnlyUser', { params: { id: sessionStorage.getItem('token') } })
       this.editForm = data.result[0]
     },
     resetForm () {
-      this.getData()
+      this.getOwnData()
       this.$refs.editForm.resetFields()
     },
-    editSubmit () {
+    editOwnInfoSubmit () {
       this.$refs.editForm.validate(async valid => {
         if (valid) {
           const { data } = await this.$http.post(
@@ -59,38 +103,40 @@ export default {
           )
           if (data.code !== 200) return this.$message.error('修改个人信息失败')
           this.$message.success('修改个人信息成功')
-          this.getData()
+          this.getOwnData()
           this.$refs.editForm.resetFields()
         }
       })
     },
+
+    // -----------------------------------------------文章列表页部分---------------------------------------------------
     // 获取文章列表
     async getOwnArticleData () {
       let { data } = await this.$http.get('getOwnArticle', {
-        params: this.queryMsg
+        params: this.queryArticleMsg
       })
       if (data.code !== 200) return this.$message.error(data.message)
       this.articleList = data.result
-      this.total = data.total
+      this.articleTotal = data.total
     },
     // 切换页码
-    changeOwnPager (newpage) {
-      this.queryMsg.pageNum = newpage
+    changeOwnArticlePager (newpage) {
+      this.queryArticleMsg.pageNum = newpage
       this.getOwnArticleData()
     },
     // 跳转到文章详情界面
     toDetail (id) {
-      this.$router.push({ path: '/articleList/detail', query: { id } })
+      this.$router.push({ path: '/showDetail', query: { id } })
     },
     // 跳转到编辑文章界面
-    toEditArticle (id) {
+    toEditOwnArticle (id) {
       this.$router.push({ path: '/articleList/edit', query: { id } })
     },
-    toAddArticle () {
+    toAddOwnArticle () {
       this.$router.push('/articleList/add')
     },
     // 删除文章
-    delArticle (id) {
+    delOwnArticle (id) {
       this.$confirm('永久删除该文章?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -108,10 +154,84 @@ export default {
         .catch(() => {
           this.$message.info('已取消删除')
         })
+    },
+
+    // ---------------------------------------------评论列表页部分-------------------------------------------------
+    // 获取评论列表
+    async getCommentData () {
+      let { data } = await this.$http.get('getOwnComment', {
+        params: this.queryCommentMsg
+      })
+      if (data.code !== 200) return this.$message.error(data.message)
+      this.commentList = data.result
+      this.commentTotal = data.total
+    },
+    // 切换页码
+    changeCommentPager (newpage) {
+      this.queryCommentMsg.pageNum = newpage
+      this.getCommentData()
+    },
+    // 编辑评论
+    showDialogCommentEditForm (row) {
+      this.dialogCommentEditVisible = true
+      this.$nextTick(async () => {
+        this.$refs.editCommentForm.resetFields()
+        this.editCommentForm.cmt_articleid = row.cmt_articleid
+        this.editCommentForm.cmt_content = row.cmt_content
+        this.editCommentForm.article_title = row.article_title
+        this.editCommentForm.cmt_state = row.cmt_state
+        this.editCommentForm.cmt_id = row.cmt_id
+      })
+    },
+    editCommentSubmit () {
+      this.$refs.editCommentForm.validate(async valid => {
+        if (valid) {
+          const { data } = await this.$http.post(
+            'editComment',
+            qs.stringify(this.editCommentForm)
+          )
+          if (data.code !== 200) return this.$message.error(data.message)
+          this.$message.success(data.message)
+          this.dialogCommentEditVisible = false
+          this.getCommentData()
+        }
+      })
+    },
+    // 删除评论
+    delComment (id) {
+      this.$confirm('永久删除该条评论?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          const { data } = await this.$http.post(
+            'delComment',
+            qs.stringify({ id })
+          )
+          if (data.code !== 200) return this.$message.error(data.message)
+          this.$message.success(data.message)
+          this.getCommentData()
+        })
+        .catch(() => {
+          this.$message.info('已取消删除')
+        })
+    },
+
+    // ---------------------------------------------焦点关注部分------------------------------------
+    async getFocus () {
+      const {data: {result}} = await this.$http.get('getFocus')
+      result.forEach((item, i) => {
+        item.article_file = '../../../static/' + item.article_file
+      })
+      this.focusList = result
+    },
+    toShowDetail (id) {
+      this.$router.push({ path: '/showDetail', query: { id } })
     }
   },
   mounted () {
     this.getOwnData()
-    this.getOwnArticleData()
+    this.getFocus()
   }
 }

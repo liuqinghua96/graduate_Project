@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       form: {
-        email: 'hy@ali.com',
+        email: 'cyj@ali.com',
         password: '123123'
       },
       rules: {

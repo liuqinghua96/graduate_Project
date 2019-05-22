@@ -2,8 +2,8 @@
   <div class="showOwn_container content">
     <div class="panel">
       <h3>个人中心</h3>
-      <el-tabs tab-position="left" style="height: 550px;marginTop:20px;">
-        <el-tab-pane label="个人信息">
+      <el-tabs tab-position="left" style="height: 400px;marginTop:20px;" @tab-click="tabClick">
+        <el-tab-pane label="个人信息" ref="ownInfo">
           <el-form :model="editForm"
                   label-width="80px"
                   autocomplete="off"
@@ -33,11 +33,11 @@
             <div class="button-group">
               <el-button @click="resetForm()" class="OwnBtn" size="small">重置</el-button>
               <el-button type="primary"
-                        @click="editSubmit()" class="OwnBtn" size="small">确 定</el-button>
+                        @click="editOwnInfoSubmit()" class="OwnBtn" size="small">确 定</el-button>
             </div>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="我的文章">
+        <el-tab-pane label="我的文章" ref="ownArticle">
           <div class="myArticle_content">
             <!-- 文章列表 -->
             <el-table :data="articleList"
@@ -80,10 +80,11 @@
                     <el-tooltip class="item"
                                 effect="dark"
                                 content="删除文章"
-                                placement="top">
+                                placement="top"
+                                round>
                       <el-button size="mini"
                                 icon="el-icon-delete"
-                                @click="delArticle(scope.row.article_id)"></el-button>
+                                @click="delOwnArticle(scope.row.article_id)"></el-button>
                     </el-tooltip>
                     <el-tooltip class="item"
                                 effect="dark"
@@ -92,7 +93,7 @@
                       <el-button size="mini"
                                 icon="el-icon-edit"
                                 round
-                                @click="toEditArticle(scope.row.article_id)"></el-button>
+                                @click="toEditOwnArticle(scope.row.article_id)"></el-button>
                     </el-tooltip>
                   </el-button-group>
                 </template>
@@ -101,22 +102,135 @@
             <el-row>
               <!-- 分页 -->
               <el-pagination background
-                            :page-size="queryMsg.pageSize"
-                            :current-page="queryMsg.pageNum"
+                            :page-size="queryArticleMsg.pageSize"
+                            :current-page="queryArticleMsg.pageNum"
                             layout="prev, pager, next"
-                            :total="total"
-                            @current-change="changeOwnPager">
+                            :total="articleTotal"
+                            @current-change="changeOwnArticlePager">
               </el-pagination>
               <!-- 添加文章 -->
               <el-button type="primary"
-                          @click="toAddArticle()"
+                          @click="toAddOwnArticle()"
                           class="addArticleBtn"
                           style="margin:20px 50px;">添加文章</el-button>
             </el-row>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="我的评论">我的评论</el-tab-pane>
+        <el-tab-pane label="我的评论" ref="ownComment">
+          <div class="myAnnounce_content">
+            <!-- 评论列表 -->
+            <el-table :data="commentList"
+                      stripe
+                      style="width: 100%">
+              <el-table-column type="index"
+                              width="50">
+              </el-table-column>
+              <el-table-column prop="article_title"
+                              label="文章标题"
+                              width="300">
+              </el-table-column>
+              <el-table-column prop="cmt_content"
+                              label="评论内容"
+                              width="200">
+              </el-table-column>
+              <el-table-column label="评论状态"
+                              width="100">
+                <template slot-scope="scope">
+                    <el-tag v-if="scope.row.cmt_state === 0"
+                            type="success"
+                            size="mini">已发布</el-tag>
+                    <el-tag v-else
+                            type="danger"
+                            size="mini">草稿</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button-group>
+                    <el-tooltip class="item"
+                                effect="dark"
+                                content="删除评论"
+                                placement="top">
+                      <el-button size="mini"
+                                icon="el-icon-delete"
+                                round
+                                @click="delComment(scope.row.cmt_id)"></el-button>
+                    </el-tooltip>
+                    <el-tooltip class="item"
+                                effect="dark"
+                                content="编辑评论"
+                                placement="top">
+                      <el-button size="mini"
+                                icon="el-icon-edit"
+                                round
+                                @click="showDialogCommentEditForm(scope.row)"></el-button>
+                    </el-tooltip>
+                  </el-button-group>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- 分页 -->
+            <el-pagination background
+                          :page-size="queryCommentMsg.pageSize"
+                          :current-page="queryCommentMsg.pageNum"
+                          layout="prev, pager, next"
+                          :total="commentTotal"
+                          @current-change="changeCommentPager">
+            </el-pagination>
+          </div>
+          <!-- 编辑评论弹出层 -->
+          <el-dialog width="500px"
+                    title="编辑评论"
+                    :visible.sync="dialogCommentEditVisible">
+            <el-form :model="editCommentForm"
+                    label-width="80px"
+                    autocomplete="off"
+                    :rules="rules_cmt"
+                    ref="editCommentForm">
+              <el-form-item label="文章标题"
+                            prop="article_title">
+                <el-input v-model="editCommentForm.article_title"
+                          disabled></el-input>
+              </el-form-item>
+              <el-form-item label="评论内容"
+                            prop="cmt_content">
+                <el-input v-model="editCommentForm.cmt_content"></el-input>
+              </el-form-item>
+              <el-form-item label="发布状态"
+                            prop="cmt_state">
+                <el-select v-model="editCommentForm.cmt_state"
+                          placeholder="请选择">
+                  <el-option key="0"
+                            label="发布"
+                            :value="0">
+                  </el-option>
+                  <el-option key="1"
+                            label="草稿"
+                            :value="1">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer"
+                class="dialog-footer">
+              <el-button @click="dialogCommnetEditVisible = false">取 消</el-button>
+              <el-button type="primary"
+                        @click="editCommentSubmit()">确 定</el-button>
+            </div>
+          </el-dialog>
+        </el-tab-pane>
       </el-tabs>
+    </div>
+    <div class="panel focus">
+      <h3>焦点关注</h3>
+      <ul>
+        <li v-for="(item,i) in focusList" :class="i===0?'large':''" :key="i">
+          <a @click="toShowDetail(item.article_id)">
+            <img :src="item.article_file" alt="">
+            <span>{{item.article_title}}</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>

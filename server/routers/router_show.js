@@ -171,7 +171,7 @@ router.get('/api/graduate/getAllAnnounce', (req, res) => {
 router.get('/api/graduate/getOwnArticle', (req, res) => {
   // 查询除了管理员外的所有用户
   db.query(
-    `select * from article,users,cates where article_title like ? and article.article_userid = users.user_id and article.article_cateid = cates.cate_id and article.article_userid = ${req.query.article_userid}`,
+    `select * from article,cates where article_title like ?  and article.article_cateid = cates.cate_id and article.article_userid = ${req.query.article_userid}`,
     '%' + req.query.query + '%',
     (err, result) => {
       if (err) {
@@ -188,6 +188,29 @@ router.get('/api/graduate/getOwnArticle', (req, res) => {
         result = result.slice(pageStart)
       }
       res.send({ code: 200, message: '获取文章列表成功', result, total })
+    }
+  )
+})
+// 获取当前用户发表的评论列表
+router.get('/api/graduate/getOwnComment', (req, res) => {
+  db.query(
+    `select * from comment,article where article.article_id = comment.cmt_articleid and article.article_title like ? and comment.cmt_userid = ${req.query.cmt_userid}`,
+    '%' + req.query.query + '%',
+    (err, result) => {
+      if (err) {
+        console.log(err)
+        return res.send({ code: 201, message: '获取评论列表失败' })
+      }
+      const total = result.length
+      // abc中存储的是result.length/5向上取整得到的值
+      const abc = Math.floor(result.length / 5)
+      const pageStart = (req.query.pageNum - 1) * 5
+      if (req.query.pageNum <= abc) {
+        result = result.slice(pageStart, pageStart + 5)
+      } else {
+        result = result.slice(pageStart)
+      }
+      res.send({ code: 200, message: '获取评论列表成功', result, total })
     }
   )
 })
