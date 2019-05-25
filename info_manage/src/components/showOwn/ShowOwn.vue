@@ -69,7 +69,7 @@
                   <el-button-group>
                     <el-tooltip class="item"
                                 effect="dark"
-                                content="文章详情"
+                                content="详情"
                                 placement="top"
                                 round>
                       <el-button size="mini"
@@ -79,7 +79,7 @@
                     </el-tooltip>
                     <el-tooltip class="item"
                                 effect="dark"
-                                content="删除文章"
+                                content="删除"
                                 placement="top"
                                 round>
                       <el-button size="mini"
@@ -88,7 +88,7 @@
                     </el-tooltip>
                     <el-tooltip class="item"
                                 effect="dark"
-                                content="编辑文章"
+                                content="编辑"
                                 placement="top">
                       <el-button size="mini"
                                 icon="el-icon-edit"
@@ -115,6 +115,18 @@
                           style="margin:20px 50px;">添加文章</el-button>
             </el-row>
           </div>
+          <!-- 编辑文章弹出层 -->
+          <el-dialog width="900px"
+                    title="编辑文章"
+                    :visible.sync="dialogArticleEditVisible">
+            <quill-editor v-model="editArticleForm.article_text"
+                          style="height:350px; marginBottom:40px;">
+            </quill-editor>
+            <div class="btnGroup editBtn">
+              <el-button type="primary" plain class="formBtn" @click="submitEditArticle('草稿')">保存草稿</el-button>
+              <el-button type="success" plain class="formBtn" @click="submitEditArticle('已发布')">重新发布</el-button>
+            </div>
+          </el-dialog>
         </el-tab-pane>
         <el-tab-pane label="我的评论" ref="ownComment">
           <div class="myAnnounce_content">
@@ -149,7 +161,7 @@
                   <el-button-group>
                     <el-tooltip class="item"
                                 effect="dark"
-                                content="删除评论"
+                                content="删除"
                                 placement="top">
                       <el-button size="mini"
                                 icon="el-icon-delete"
@@ -158,7 +170,7 @@
                     </el-tooltip>
                     <el-tooltip class="item"
                                 effect="dark"
-                                content="编辑评论"
+                                content="编辑"
                                 placement="top">
                       <el-button size="mini"
                                 icon="el-icon-edit"
@@ -259,5 +271,8 @@ export default {
 }
 .addArticleBtn {
   margin-left: 30px;
+}
+.btnGroup.editBtn {
+  margin-top: 80px;
 }
 </style>

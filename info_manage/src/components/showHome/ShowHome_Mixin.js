@@ -38,6 +38,7 @@ export default {
       })
       this.lastComment = result
     },
+    // 带参数跳转至'/showList'地址
     toShowList (id) {
       this.$router.push({ path: '/showList', query: { id } })
     },

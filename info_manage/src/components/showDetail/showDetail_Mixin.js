@@ -70,10 +70,10 @@ export default {
           if (data.code !== 200) return this.$message.error(data.message)
           this.$message.success(data.message)
           // 这部分要写刷新对应文章的评论区域
+          this.getArticleLastCmt(this.$route.query.id)
         }
       })
       this.form.textarea = ''
-      this.getArticleLastCmt(this.$route.query.id)
     },
     async getWeekHot () {
       // 按照点赞数量获取

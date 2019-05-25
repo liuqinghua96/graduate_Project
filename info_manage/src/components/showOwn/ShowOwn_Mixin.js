@@ -41,6 +41,8 @@ export default {
       addForm: {},
       article_text: '',
       // text: ''
+      dialogArticleEditVisible: false,
+      editArticleForm: {},
       // -------------------------------------个人评论列表-------------------------------
       queryCommentMsg: {
         cmt_userid: sessionStorage.getItem('token'),
@@ -130,7 +132,8 @@ export default {
     },
     // 跳转到编辑文章界面
     toEditOwnArticle (id) {
-      this.$router.push({ path: '/articleList/edit', query: { id } })
+      this.dialogArticleEditVisible = true
+      this.getArticle_Detail(id)
     },
     toAddOwnArticle () {
       this.$router.push('/articleList/add')
@@ -155,7 +158,28 @@ export default {
           this.$message.info('已取消删除')
         })
     },
-
+    // 根据id获取文章详情
+    async getArticle_Detail (id) {
+      const {
+        data: { result }
+      } = await this.$http.get('getArticle_Detail', {
+        params: { id }
+      })
+      result[0].article_file = '../../../static/' + result[0].article_file
+      this.editArticleForm = result[0]
+    },
+    // 编辑文章为草稿/发布
+    async submitEditArticle (state) {
+      this.editArticleForm.article_state = state
+      const { data } = await this.$http.post(
+        'submitEditArticle',
+        qs.stringify(this.editArticleForm)
+      )
+      if (data.code !== 200) return this.$message.error(data.message)
+      this.$message.success(data.message)
+      this.dialogArticleEditVisible = false
+      this.getOwnArticleData()
+    },
     // ---------------------------------------------评论列表页部分-------------------------------------------------
     // 获取评论列表
     async getCommentData () {
