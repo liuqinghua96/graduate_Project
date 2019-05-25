@@ -43,6 +43,30 @@ export default {
       // text: ''
       dialogArticleEditVisible: false,
       editArticleForm: {},
+      dialogArticleAddVisible: false,
+      cateOptions: [],
+      addArticleInfo: {
+        article_title: '',
+        article_desc: '',
+        article_text: '',
+        article_cateid: '',
+        article_userid: sessionStorage.getItem('token'),
+        article_state: ''
+      },
+      rules2: {
+        article_title: [
+          { required: true, message: '标题不得为空', trigger: 'blur' }
+        ],
+        article_desc: [
+          { required: true, message: '摘要不得为空', trigger: 'blur' }
+        ],
+        article_text: [
+          { required: true, message: '内容不得为空', trigger: 'blur' }
+        ],
+        article_cateid: [
+          { required: true, message: '栏目类型必选', trigger: 'blur' }
+        ]
+      },
       // -------------------------------------个人评论列表-------------------------------
       queryCommentMsg: {
         cmt_userid: sessionStorage.getItem('token'),
@@ -130,13 +154,15 @@ export default {
     toDetail (id) {
       this.$router.push({ path: '/showDetail', query: { id } })
     },
-    // 跳转到编辑文章界面
+    // 打开编辑文章界面
     toEditOwnArticle (id) {
       this.dialogArticleEditVisible = true
       this.getArticle_Detail(id)
     },
+    // 打开添加文章界面
     toAddOwnArticle () {
-      this.$router.push('/articleList/add')
+      this.dialogArticleAddVisible = true
+      this.getCates()
     },
     // 删除文章
     delOwnArticle (id) {
@@ -179,6 +205,27 @@ export default {
       this.$message.success(data.message)
       this.dialogArticleEditVisible = false
       this.getOwnArticleData()
+    },
+    // 获取栏目列表
+    async getCates () {
+      const { data: { result } } = await this.$http.get('getCates')
+      this.cateOptions = result
+    },
+    // 添加文章为草稿/发布
+    async submitAddArticle (state) {
+      this.addArticleInfo.article_state = state
+      this.$refs.addArticleInfo.validate(async valid => {
+        if (valid) {
+          const { data } = await this.$http.post(
+            'submitAddArticle',
+            qs.stringify(this.addArticleInfo)
+          )
+          if (data.code !== 200) return this.$message.error(data.message)
+          this.$message.success(data.message)
+          this.dialogArticleAddVisible = false
+          this.getOwnArticleData()
+        }
+      })
     },
     // ---------------------------------------------评论列表页部分-------------------------------------------------
     // 获取评论列表

@@ -127,6 +127,48 @@
               <el-button type="success" plain class="formBtn" @click="submitEditArticle('已发布')">重新发布</el-button>
             </div>
           </el-dialog>
+          <!-- 添加文章弹出层 -->
+          <el-dialog width="80%"
+                    title="添加文章"
+                    :visible.sync="dialogArticleAddVisible">
+            <el-form label-position="right"
+                    label-width="80px"
+                    :model="addArticleInfo"
+                    :rules="rules2"
+                    ref="addArticleInfo">
+              <el-form-item label="所属栏目" prop="article_cateid">
+                <el-select v-model="addArticleInfo.article_cateid"
+                          placeholder="请选择">
+                  <el-option v-for="(item,i) in cateOptions"
+                            :key="i"
+                            :label="item.cate_name"
+                            :value="item.cate_id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="标题" prop="article_title">
+                <el-input v-model="addArticleInfo.article_title"></el-input>
+              </el-form-item>
+              <el-form-item label="摘要" prop="article_desc">
+                <el-input v-model="addArticleInfo.article_desc"></el-input>
+              </el-form-item>
+              <el-form-item label="文章内容" prop="article_text">
+                <quill-editor v-model="addArticleInfo.article_text"
+                              style="height:255px; marginBottom:40px;">
+                </quill-editor>
+              </el-form-item>
+            </el-form>
+            <div class="btnGroup">
+              <el-button type="primary"
+                        plain
+                        class="formBtn"
+                        @click="submitAddArticle('草稿')">保存草稿</el-button>
+              <el-button type="success"
+                        plain
+                        class="formBtn"
+                        @click="submitAddArticle('已发布')">发布文章</el-button>
+            </div>
+          </el-dialog>
         </el-tab-pane>
         <el-tab-pane label="我的评论" ref="ownComment">
           <div class="myAnnounce_content">
@@ -274,5 +316,12 @@ export default {
 }
 .btnGroup.editBtn {
   margin-top: 80px;
+}
+.el-button.formBtn {
+  margin-right: 20px;
+  margin-top: 35px;
+}
+.el-button.formBtn:first-child {
+  margin-left: 100px;
 }
 </style>
