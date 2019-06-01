@@ -8,7 +8,8 @@ export default {
       // 随机推荐
       randCommend: [],
       // 最新评论
-      lastComment: []
+      lastComment: [],
+      searchWords: ''
     }
   },
   methods: {
@@ -47,6 +48,10 @@ export default {
     },
     toShowDetail (id) {
       this.$router.push({ path: '/showDetail', query: { id } })
+    },
+    toShowSearch () {
+      this.$router.push({ path: '/showSearch', query: { keywords: this.searchWords } })
+      this.searchWords = ''
     },
     toOwnCenter () {
       this.$router.push('/showOwn')

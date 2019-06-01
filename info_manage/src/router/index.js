@@ -15,6 +15,7 @@ import AnnounceList from '@/components/announce/AnnounceList'
 import ShowHome from '@/components/showHome/ShowHome'
 import ShowWelcome from '@/components/showHome/ShowWelcome'
 import ShowList from '@/components/showList/ShowList'
+import ShowSearch from '@/components/showSearch/ShowSearch'
 import ShowDetail from '@/components/showDetail/ShowDetail'
 import ShowAnnounce from '@/components/showAnnounce/ShowAnnounce'
 import ShowOwn from '@/components/showOwn/ShowOwn'
@@ -70,6 +71,7 @@ const router = new Router({
         { path: '/showWelcome', name: 'showWelcome', component: ShowWelcome },
         { path: '/showDetail', name: 'showDetail', component: ShowDetail },
         { path: '/showList', name: 'showList', component: ShowList },
+        { path: '/showSearch', name: 'showSearch', component: ShowSearch },
         { path: '/showAnnounce', name: 'showAnnounce', component: ShowAnnounce },
         { path: '/showOwn', name: 'showOwn', component: ShowOwn }
       ]

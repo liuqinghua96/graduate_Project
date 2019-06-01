@@ -13,8 +13,8 @@
     </ul>
     <div class="search">
       <form>
-        <input type="text" class="keys" placeholder="输入文章关键字">
-        <input type="submit" class="btn" value="搜索">
+        <input type="text" class="keys" placeholder="输入文章关键字" v-model="searchWords">
+        <input type="submit" class="btn" value="搜索" @click="toShowSearch()">
       </form>
     </div>
   </div>

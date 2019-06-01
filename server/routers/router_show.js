@@ -107,6 +107,19 @@ router.get('/api/graduate/getShowList', (req, res) => {
   })
 })
 
+// 按关键词搜索文章
+router.get('/api/graduate/getShowSearch', (req, res) => {
+  db.query(
+    'select * from  article,users,cates where article.article_userid = users.user_id and article.article_cateid = cates.cate_id and article.article_state = ? and article.article_title like ? order by article.article_id desc limit 0,6',['已发布','%' + req.query.keywords + '%'],
+    (err, result) => {
+      if (err) {
+        console.log(err)
+        return res.send({ code: 201, message: '获取对应文章失败' })
+      }
+      res.send({ code: 200, message: '获取对应文章成功', result })
+    }
+  )
+})
 // -------------------------------------------------------文章详情页局部区域---------------------------------------------------------------------
 // 根据id获取文章的详细信息
 router.get('/api/graduate/getArticle_Detail', (req, res) => {
