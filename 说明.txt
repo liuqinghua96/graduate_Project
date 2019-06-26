@@ -1,14 +1,16 @@
-info_manageĿ¼�£�����̨���� npm run dev
-serverĿ¼�£�����̨���� nodemon .\app.js
+项目名称：基于Vue信息资讯展示与管理平台
+
+info_manage目录下，控制台输入 npm run dev
+server目录下，控制台输入 nodemon .\app.js
 
 
-root@ali.com Ϊ����Ա�û���
-lyf@ali.comΪ�����õ��û���
-����������ͨ�û���
-�����û������붼��123123��
+root@ali.com 为管理员用户，
+lyf@ali.com为被禁用的用户，
+其他都是普通用户。
+所有用户的密码都是123123。
 
 
-�ļ�Ŀ¼��
-��ǰ̨��صĴ��붼����show��ͷ���ļ����棬
-�����ļ��Ǻͺ�̨��صġ�
+文件目录：
+跟前台相关的代码都放在show开头的文件里面，
+其他文件是和后台相关的。
 
